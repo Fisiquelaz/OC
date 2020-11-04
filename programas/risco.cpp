@@ -10,9 +10,9 @@
 using namespace std;
 
 int main() {
-    //MEM memoria;
-    //REGS registradores;
-    //ULA ula;
+    MEM memoria;
+    REGS registradores;
+    ULA ula;
     int dados = 0, programa = 0, aux = 0, fim = 0, pos = 0, ciclos = 0;
 
     ifstream inFile;
@@ -23,7 +23,7 @@ int main() {
     cout << "Insira o nome do arquivo com as intruções" << endl;
     cin >> arquivo;
 
-    inFile.open((char*)arquivo);
+    inFile.open("programas/"+arquivo);
     if (!inFile) {
         cout << "Erro ao abrir o arquivo";
         return -1;

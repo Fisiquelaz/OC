@@ -12,14 +12,37 @@ class ULA {
   public:
     ULA();
     
-    //void LDR(int reg, int mem);
-    void ADD(int reg, int mem);
-    void OR(int reg, int mem);
-    void AND(int reg, int mem);
-    void NOT(int reg);
-    void SUB(int reg, int mem);
-    void NEG(int reg);
-    void SHR(int reg);
+    void ADD(int dest, int fa, int fb);
+    void ADDC(int dest, int fa, int fb);
+
+    void SUB(int dest, int fa, int fb);
+    void SUBC(int dest, int fa, int fb);
+    void SUBR(int dest, int fa, int fbm);
+    void SUBRC(int dest, int fa, int fb);
+
+    void AND(int dest, int fa, int fb);
+    void OR(int dest, int fa, int fb);
+    void XOR(int dest, int fa, int fb);
+
+    void RRL(int dest, int fa, int fb);
+    void RRLC(int dest, int fa, int fb);
+    void RRA(int dest, int fa, int fb);
+    void RRAC(int dest, int fa, int fb);
+
+    void RLL(int dest, int fa, int fb);
+    void RLLC(int dest, int fa, int fb);
+    void RLA(int dest, int fa, int fb);
+    void RLAC(int dest, int fa, int fb);
+
+    void RRL(int dest, int fa, int fb);
+    void RRLC(int dest, int fa, int fb);
+    void RRA(int dest, int fa, int fb);
+    void RRAC(int dest, int fa, int fb);
+
+    void RLL(int dest, int fa, int fb);
+    void RLLC(int dest, int fa, int fb);
+    void RLA(int dest, int fa, int fb);
+    void RLAC(int dest, int fa, int fb);
 
 };
 #endif

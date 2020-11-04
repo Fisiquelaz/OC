@@ -1,0 +1,2 @@
+Resultado: 38
+Ciclos: 10

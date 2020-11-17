@@ -1,0 +1,2 @@
+language = "cpp"
+run = "cd programas/ make risco ./risco"

@@ -1,0 +1,5 @@
+*t1, t0:
+>00: aritmetico-logica
+>01: acesso à memória
+>10: salto
+>11: sub-rotina

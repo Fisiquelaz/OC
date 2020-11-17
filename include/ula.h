@@ -34,15 +34,16 @@ class ULA {
     void RLA(int dest, int fa, int fb);
     void RLAC(int dest, int fa, int fb);
 
-    void RRL(int dest, int fa, int fb);
-    void RRLC(int dest, int fa, int fb);
-    void RRA(int dest, int fa, int fb);
-    void RRAC(int dest, int fa, int fb);
+    void SRL(int dest, int fa, int fb);
+    void SRLC(int dest, int fa, int fb);
+    void SRA(int dest, int fa, int fb);
+    void SRAC(int dest, int fa, int fb);
 
-    void RLL(int dest, int fa, int fb);
-    void RLLC(int dest, int fa, int fb);
-    void RLA(int dest, int fa, int fb);
-    void RLAC(int dest, int fa, int fb);
+    void SLL(int dest, int fa, int fb);
+    void SLLC(int dest, int fa, int fb);
+    void SLA(int dest, int fa, int fb);
+    void SLAC(int dest, int fa, int fb);
 
 };
+
 #endif

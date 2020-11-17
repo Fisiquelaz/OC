@@ -1,12 +1,14 @@
 #include "../include/registradores.h"
 #include "../include/ula.h"
 #include "../include/memoria.h"
+#include "../include/funcoes.h"
 
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <string>
 #include <stdio.h>
+#include <sstream>
 using namespace std;
 
 int main() {
@@ -17,239 +19,180 @@ int main() {
 
     ifstream inFile;
     string STRING;
-    string entrada, arquivo;
+    string entrada, arquivo, instrucao;
+    string t1t0, codigo, f1f0;
+    string destino, op1, op2;
+    int auxdestino, auxop1, auxop2;
+    stringstream transformador;
+    char ss2;
+    string instrucoes[100];
     char *cstr;
 
     cout << "Insira o nome do arquivo com as intruções" << endl;
     cin >> arquivo;
 
-    inFile.open("programas/"+arquivo);
+    inFile.open(arquivo);
     if (!inFile) {
-        cout << "Erro ao abrir o arquivo";
+        cout << "Erro ao abrir o arquivo" << endl;
         return -1;
     }
     if (inFile.is_open()) {
-        if(!inFile.eof()) {
-            inFile >> STRING;
-            while (STRING != ":dados"){
-                inFile >> STRING;
-            }
-            while (STRING != ":programa"){
-                inFile >> STRING;
-                if(STRING != ":programa") {
-                    cstr = &STRING[0u];
-                    sscanf(cstr, "%d", &dados);
-
-                    inFile >> STRING;
-                    cstr = &STRING[0u];
-                    sscanf(cstr, "%d", &aux);
-
-                    memoria.STR(aux, dados);
-                }
-            }
-            while (!inFile.eof()){
-                inFile >> STRING;
-                if(STRING != ":programa") {
-                    cstr = &STRING[0u];
-                    sscanf(cstr, "%d", &aux);
-
-                    memoria.STR(aux, programa);
-                    programa++;
-                }
-            }
-        }
+      while (!inFile.eof()){
+        inFile >> STRING;
+        instrucoes[programa] = STRING;
+        programa++;
+      }
     }
     inFile.close();
-    int a, b, m;
     for(int CP = 0; CP < 128; CP++){
         cout << "PC: " << CP << endl;
-        aux = memoria.get_mem(CP);
-        cout << "RI: " << aux << endl;
-        cout << "a: " << registradores.get_reg(0) << " B: " << registradores.get_reg(1) << " X: " << registradores.get_reg(2) << endl;
-        cout << "N: " << registradores.get_reg(3) << " Z: " << registradores.get_reg(4) << " C: " << registradores.get_reg(5) << endl;
+        cout << "Registradores: " << endl;
+        for(int i = 0; i < 32; i++){
+            cout << i << ": " << registradores.get_reg(i) << " ";
+        }
+        cout << endl;
         cout << "Memória de dados: " << endl;
         for(int i = 128; i < 256; i++){
             cout << i << ": " << memoria.get_mem(i) << " ";
         }
         cout << endl;
-        switch(aux){
-            case 1:
-                //STR
-                a = registradores.get_reg(memoria.get_mem(++CP));
-                m = memoria.get_mem(++CP);
-                if(m == 0){
-                    b = memoria.get_mem(++CP);
-                }
-                else if(m == 1){
-                    b = memoria.get_mem(memoria.get_mem(++CP));
-                    ciclos += 3;
-                }
-                else if(m == 2){
-                    b = memoria.get_mem(++CP);
-                }
-                else if(m == 3){
-                    b = memoria.get_mem((++CP)+registradores.get_reg(2));
-                }
-                memoria.STR(a, b);
-                ciclos += 3;
-                break;
-            case 2:
-                //LDR
-                a = memoria.get_mem(++CP);
-                m = memoria.get_mem(++CP);
-                if(m == 0){
-                    b = memoria.get_mem(memoria.get_mem(++CP));
-                    ciclos += 3;
-                }
-                else if(m == 1){
-                    b = memoria.get_mem(memoria.get_mem(memoria.get_mem(++CP)));
-                    ciclos += 6;
-                }
-                else if(m == 2){
-                    b = memoria.get_mem(++CP);
-                }
-                else if(m == 3){
-                    b = memoria.get_mem(memoria.get_mem(++CP)+registradores.get_reg(2));
-                    ciclos += 3;
-                }
-                registradores.LDR(a, b);
-                break;
-            case 3:
-                //ADD
-                a = memoria.get_mem(++CP);
-                m = memoria.get_mem(++CP);
-                if(m == 0){
-                    b = memoria.get_mem(memoria.get_mem(++CP));
-                    ciclos += 3;
-                }
-                else if(m == 1){
-                    b = memoria.get_mem(memoria.get_mem(memoria.get_mem(++CP)));
-                    ciclos += 6;
-                }
-                else if(m == 2){
-                    b = memoria.get_mem(++CP);
-                }
-                else if(m == 3){
-                    b = memoria.get_mem(memoria.get_mem((++CP)+registradores.get_reg(2)));
-                    ciclos += 3;
-                }
-                ula.ADD(a, b);
-                cout << "ULA: ADD" << endl;
-                ciclos += 1;
-                break;
-            case 4:
-                //OR
-                a = memoria.get_mem(++CP);
-                m = memoria.get_mem(++CP);
-                if(m == 0){
-                    b = memoria.get_mem(memoria.get_mem(++CP));
-                    ciclos += 3;
-                }
-                else if(m == 1){
-                    b = memoria.get_mem(memoria.get_mem(memoria.get_mem(++CP)));
-                    ciclos += 6;
-                }
-                else if(m == 2){
-                    b = memoria.get_mem(++CP);
-                }
-                else if(m == 3){
-                    b = memoria.get_mem(memoria.get_mem((++CP)+registradores.get_reg(2)));
-                    ciclos += 3;
-                }
-                ula.OR(a, b);
-                cout << "ULA: OR" << endl;
-                ciclos += 1;
-                break;
-            case 5:
-                //AND
-                a = memoria.get_mem(++CP);
-                m = memoria.get_mem(++CP);
-                if(m == 0){
-                    b = memoria.get_mem(memoria.get_mem(++CP));
-                    ciclos += 3;
-                }
-                else if(m == 1){
-                    b = memoria.get_mem(memoria.get_mem(memoria.get_mem(++CP)));
-                    ciclos += 6;
-                }
-                else if(m == 2){
-                    b = memoria.get_mem(++CP);
-                }
-                else if(m == 3){
-                    b = memoria.get_mem(memoria.get_mem((++CP)+registradores.get_reg(2)));
-                    ciclos += 3;
-                }
-                ula.AND(a, b);
-                cout << "ULA: AND" << endl;
-                ciclos += 1;
-                break;
-            case 6:
-                //NOT
-                ula.NOT(memoria.get_mem(++CP));
-                ciclos += 1;
-                cout << "ULA: NOT" << endl;
-                break;
-            case 7:
-                //SUB
-                a = memoria.get_mem(++CP);
-                m = memoria.get_mem(++CP);
-                if(m == 0){
-                    b = memoria.get_mem(memoria.get_mem(++CP));
-                    ciclos += 3;
-                }
-                else if(m == 1){
-                    b = memoria.get_mem(memoria.get_mem(memoria.get_mem(++CP)));
-                    ciclos += 3;
-                }
-                else if(m == 2){
-                    b = memoria.get_mem(++CP);
-                }
-                else if(m == 3){
-                    b = memoria.get_mem(memoria.get_mem((++CP)+registradores.get_reg(2)));
-                    ciclos += 3;
-                }
-                ula.SUB(a, b);
-                cout << "ULA: SUB" << endl;
-                ciclos += 1;
-                break;
-            case 8:
-                //JMP
-                CP = memoria.get_mem(++CP) - 1;
-                ciclos += 1;
-                break;
-            case 9:
-                //JN
-                ++CP;
-                if(registradores.get_reg(3) == 1){
-                    CP = memoria.get_mem(CP) - 1;
-                }
-                ciclos += 1;
-                break;
-            case 10:
-                //JZ
-                ++CP;
-                if(registradores.get_reg(4) == 1){
-                    CP = memoria.get_mem(CP) - 1;
-                }
-                ciclos += 1;
-                break;
-            case 11:
-                //JC
-                ++CP;
-                if(registradores.get_reg(5) == 1){
-                    CP = memoria.get_mem(CP) - 1;
-                }
-                ciclos += 1;
-                break;
-            case 15:
-                //HLT
-                fim = 1;
-                pos = memoria.get_mem(++CP);
-                break;
-            default:
-                break;
+        instrucao = instrucoes[CP];
+        t1t0 = instrucao.substr(0,2);
+        codigo = instrucao.substr(2,5);
+        if(t1t0 == "00"){
+          //ULA
+          destino = instrucao.substr(10,5);
+          f1f0 = instrucao.substr(8,2);
+          if(f1f0 == "00"){
+            op1 = instrucao.substr(15,5);
+            ss2 = instrucao[20];
+            if(ss2 == '0'){
+              op2 = instrucao.substr(21,5);
+            }
+            else{
+              //op2 = kpe
+            }
+          }
+          if(f1f0 == "01"){
+            op1 = "00000";
+            //op2 = kgl
+          }
+          if(f1f0 == "10"){
+            op1 = destino;
+            //op2 = kgh
+          }
+          if(f1f0 == "11"){
+            op1 = destino;
+            //op2 = kgl
+          }
+          transformador << destino;
+          transformador >> auxdestino;
+          transformador << op1;
+          transformador >> auxop1;
+          transformador << op2;
+          transformador >> auxop2;
+          if(codigo == "00000"){
+            //ADD
+            ula.ADD(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "00001"){
+            //ADDC
+            ula.ADDC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "00010"){
+            //SUB
+            ula.SUB(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "00011"){
+            //SUBC
+            ula.SUBC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "00100"){
+            //SUBR
+            ula.SUBR(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "00101"){
+            //SUBRC
+            ula.SUBRC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "00110"){
+            //AND
+            ula.AND(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "00111"){
+            //OR
+            ula.OR(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "01000"){
+            //XOR
+            ula.XOR(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "01001"){
+            //RRL
+            ula.RRL(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "01010"){
+            //RRLC
+            ula.RRLC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "01011"){
+            //RRA
+            ula.RRA(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "01100"){
+            //RRAC
+            ula.RRAC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "01101"){
+            //RLL
+            ula.RLL(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "01110"){
+            //RLLC
+            ula.RLLC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "01111"){
+            //RLA
+            ula.RLA(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "10000"){
+            //RLAC
+            ula.RLAC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "10001"){
+            //SRL
+            ula.SRL(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "10010"){
+            //SRLC
+            ula.SRLC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "10011"){
+            //SRA
+            ula.RLA(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "10100"){
+            //SRAC
+            ula.RLAC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "10101"){
+            //SLL
+            ula.RLA(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "10110"){
+            //SRLC
+            ula.RLAC(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "10111"){
+            //SRA
+            ula.RLA(auxdestino,auxop1,auxop2);
+          }
+          if(codigo == "11000"){
+            //SRAC
+            ula.RLAC(auxdestino,auxop1,auxop2);
+          }
         }
-        cout << endl << "=========================================" << endl << endl;
+        fim = 1;
         if(fim == 1){
             break;
         }

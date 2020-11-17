@@ -20,7 +20,7 @@ int main() {
     ifstream inFile;
     string STRING;
     string entrada, arquivo, instrucao;
-    string t1t0, codigo, f1f0;
+    string t1t0, codigo, f1f0, kp, kg;
     string destino, op1, op2;
     int auxdestino, auxop1, auxop2;
     stringstream transformador;
@@ -59,38 +59,66 @@ int main() {
         instrucao = instrucoes[CP];
         t1t0 = instrucao.substr(0,2);
         codigo = instrucao.substr(2,5);
-        if(t1t0 == "00"){
-          //ULA
-          destino = instrucao.substr(10,5);
-          f1f0 = instrucao.substr(8,2);
-          if(f1f0 == "00"){
-            op1 = instrucao.substr(15,5);
-            ss2 = instrucao[20];
-            if(ss2 == '0'){
-              op2 = instrucao.substr(21,5);
-            }
-            else{
-              //op2 = kpe
-            }
-          }
-          if(f1f0 == "01"){
-            op1 = "00000";
-            //op2 = kgl
-          }
-          if(f1f0 == "10"){
-            op1 = destino;
-            //op2 = kgh
-          }
-          if(f1f0 == "11"){
-            op1 = destino;
-            //op2 = kgl
-          }
-          transformador << destino;
-          transformador >> auxdestino;
+
+        kp = instrucao.substr(21,11);
+        kg = instrucao.substr(15,17);
+
+        destino = instrucao.substr(10,5);
+        transformador << destino;
+        transformador >> auxdestino;
+        auxdestino = BTD(auxdestino);
+
+        f1f0 = instrucao.substr(8,2);
+        if(f1f0 == "00"){
+          //Recebe FT1 em string binario, transforma para int binario, transforma em decimal e recebe valor do registrador
+          op1 = instrucao.substr(15,5);
           transformador << op1;
           transformador >> auxop1;
+          auxop1 = BTD(auxop1);
+          auxop1 = registradores.get_reg(auxop1);
+
+          ss2 = instrucao[20];
+          if(ss2 == '0'){
+            op2 = instrucao.substr(21,5);
+            transformador << op2;
+            transformador >> auxop2;
+            auxop2 = BTD(auxop2);
+            auxop2 = registradores.get_reg(auxop2);
+          }
+          else{
+            op2 = calculaKpe(kp);
+            transformador << op2;
+            transformador >> auxop2;
+            auxop2 = BTD(auxop2);
+          }
+        }
+        if(f1f0 == "01"){
+          op1 = "00000";
+          auxop1 = registradores.get_reg(0);
+          op2 = calculaKgl(kg);
           transformador << op2;
           transformador >> auxop2;
+          auxop2 = BTD(auxop2);
+        }
+        if(f1f0 == "10"){
+          op1 = destino;
+          auxop1 = registradores.get_reg(auxdestino);
+          op2 = calculaKgh(kg);
+          transformador << op2;
+          transformador >> auxop2;
+          auxop2 = BTD(auxop2);
+        }
+        if(f1f0 == "11"){
+          op1 = destino;
+          auxop1 = registradores.get_reg(auxdestino);
+          op2 = calculaKgl(kg);
+          transformador << op2;
+          transformador >> auxop2;
+          auxop2 = BTD(auxop2);
+        }
+
+        if(t1t0 == "00" || t1t0 == "00"){
+          //ULA
           if(codigo == "00000"){
             //ADD
             ula.ADD(auxdestino,auxop1,auxop2);
@@ -169,27 +197,27 @@ int main() {
           }
           if(codigo == "10011"){
             //SRA
-            ula.RLA(auxdestino,auxop1,auxop2);
+            ula.SLA(auxdestino,auxop1,auxop2);
           }
           if(codigo == "10100"){
             //SRAC
-            ula.RLAC(auxdestino,auxop1,auxop2);
+            ula.SLAC(auxdestino,auxop1,auxop2);
           }
           if(codigo == "10101"){
             //SLL
-            ula.RLA(auxdestino,auxop1,auxop2);
+            ula.SLA(auxdestino,auxop1,auxop2);
           }
           if(codigo == "10110"){
             //SRLC
-            ula.RLAC(auxdestino,auxop1,auxop2);
+            ula.SLAC(auxdestino,auxop1,auxop2);
           }
           if(codigo == "10111"){
             //SRA
-            ula.RLA(auxdestino,auxop1,auxop2);
+            ula.SLA(auxdestino,auxop1,auxop2);
           }
           if(codigo == "11000"){
             //SRAC
-            ula.RLAC(auxdestino,auxop1,auxop2);
+            ula.SLAC(auxdestino,auxop1,auxop2);
           }
         }
         fim = 1;
@@ -199,11 +227,9 @@ int main() {
     }
     ofstream outFile ("saida.txt");
     if(outFile.is_open()){
-        if(memoria.get_mem(pos+1) != 0){
-            outFile << "Resultado: " << (memoria.get_mem(pos)*128) + memoria.get_mem(pos+1) << endl;
-        }
-        else{
-            outFile << "Resultado: " << memoria.get_mem(pos) << endl;
+        cout << "Registradores: " << endl;
+        for(int i = 0; i < 32; i++){
+            cout << i << ": " << registradores.get_reg(i) << " ";
         }
         outFile << "Ciclos: " << ciclos;
     }

@@ -4,6 +4,9 @@
 #include <iostream>
 using namespace std;
 
-int BinaryToDecimal(int n);
+int BTD(int n);
+string calculaKpe(string kp);
+string calculaKgh(string kg);
+string calculaKgl(string kg);
 
 #endif

@@ -7,7 +7,7 @@ ULA::ULA()
 
 void ULA::ADD(int dest, int fa, int fb){
 	REGS r;
-	r.LDR(dest, r.get_reg(fa) + r.get_reg(fb));
+	r.LDR(dest, fa + fb);
 }
 
 /*void ULA::ADDC(int dest, int fa, int fb){
@@ -34,7 +34,7 @@ void ULA::ADDC(int dest, int fa, int fb){
 
 void ULA::SUB(int dest, int fa, int fb){
 	REGS r;
-	r.LDR(dest, r.get_reg(fa) - r.get_reg(fb) + 1);
+	r.LDR(dest, fa - fb + 1);
 }
 
 void ULA::SUBC(int dest, int fa, int fb){
@@ -42,7 +42,8 @@ void ULA::SUBC(int dest, int fa, int fb){
 }
 
 void ULA::SUBR(int dest, int fa, int fb){
-	
+	REGS r;
+	r.LDR(dest, fb - fa + 1);
 }
 
 void ULA::SUBRC(int dest, int fa, int fb){
@@ -50,65 +51,68 @@ void ULA::SUBRC(int dest, int fa, int fb){
 }
 
 void ULA::AND(int dest, int fa, int fb){
-	
+	REGS r;
+	r.LDR(dest, fa & fb);
 }
 
 void ULA::OR(int dest, int fa, int fb){
-	
+	REGS r;
+	r.LDR(dest, fa | fb);
 }
 
 void ULA::XOR(int dest, int fa, int fb){
-	
+	REGS r;
+	r.LDR(dest, fa ^ fb);
 }
 
-void RRL(int dest, int fa, int fb){
+void ULA::RRL(int dest, int fa, int fb){
 
 }
-void RRLC(int dest, int fa, int fb){
+void ULA::RRLC(int dest, int fa, int fb){
 
 }
-void RRA(int dest, int fa, int fb){
+void ULA::RRA(int dest, int fa, int fb){
 
 }
-void RRAC(int dest, int fa, int fb){
-
-}
-
-void RLL(int dest, int fa, int fb){
-
-}
-void RLLC(int dest, int fa, int fb){
-
-}
-void RLA(int dest, int fa, int fb){
-
-}
-void RLAC(int dest, int fa, int fb){
+void ULA::RRAC(int dest, int fa, int fb){
 
 }
 
-void SRL(int dest, int fa, int fb){
+void ULA::RLL(int dest, int fa, int fb){
 
 }
-void SRLC(int dest, int fa, int fb){
+void ULA::RLLC(int dest, int fa, int fb){
 
 }
-void SRA(int dest, int fa, int fb){
+void ULA::RLA(int dest, int fa, int fb){
 
 }
-void SRAC(int dest, int fa, int fb){
+void ULA::RLAC(int dest, int fa, int fb){
 
 }
 
-void SLL(int dest, int fa, int fb){
+void ULA::SRL(int dest, int fa, int fb){
 
 }
-void SLLC(int dest, int fa, int fb){
+void ULA::SRLC(int dest, int fa, int fb){
 
 }
-void SLA(int dest, int fa, int fb){
+void ULA::SRA(int dest, int fa, int fb){
 
 }
-void SLAC(int dest, int fa, int fb){
+void ULA::SRAC(int dest, int fa, int fb){
+
+}
+
+void ULA::SLL(int dest, int fa, int fb){
+
+}
+void ULA::SLLC(int dest, int fa, int fb){
+
+}
+void ULA::SLA(int dest, int fa, int fb){
+
+}
+void ULA::SLAC(int dest, int fa, int fb){
 
 }

@@ -2,7 +2,9 @@
 #define ULA_H
 
 #include "../include/registradores.h"
+#include "../include/funcoes.h"
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 class ULA {

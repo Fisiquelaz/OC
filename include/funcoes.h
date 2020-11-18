@@ -4,6 +4,7 @@
 #include <iostream>
 using namespace std;
 
+string DTB(int n);
 int BTD(int n);
 string calculaKpe(string kp);
 string calculaKgh(string kg);

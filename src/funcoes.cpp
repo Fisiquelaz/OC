@@ -1,5 +1,18 @@
 #include "../include/funcoes.h"
 
+string DTB(int n) {
+   string binaryNumber[100], result = "";
+   int num=n, i = 0;
+   while (n > 0) {
+      binaryNumber[i] = to_string(n % 2);
+      n = n / 2;
+      i++;
+   }
+   for (int j = i - 1; j >= 0; j--)
+      result += binaryNumber[j];
+   return result;
+}
+
 int BTD(int n) {
   int decimal = 0;
   int base = 1;

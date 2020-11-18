@@ -8,27 +8,25 @@
 #include <fstream>
 #include <string>
 #include <stdio.h>
-#include <sstream>
 using namespace std;
 
 int main() {
     MEM memoria;
     REGS registradores;
     ULA ula;
-    int dados = 0, programa = 0, aux = 0, fim = 0, pos = 0, ciclos = 0;
 
-    ifstream inFile;
-    string STRING;
+    int programa = 0, ciclos = 0, psw;
+    int auxdestino, auxop1, auxop2;
+
     string entrada, arquivo, instrucao;
     string t1t0, codigo, f1f0, kp, kg;
     string destino, op1, op2;
-    int auxdestino, auxop1, auxop2;
-    stringstream transformador;
-    char ss2;
     string instrucoes[100];
-    char *cstr;
+    char ss2;
 
-    cout << "Insira o nome do arquivo com as intruções" << endl;
+    ifstream inFile;
+
+    cout << "Insira o nome do arquivo com as intruções (deve estar na mesma pasta do programa)" << endl;
     cin >> arquivo;
 
     inFile.open(arquivo);
@@ -38,14 +36,13 @@ int main() {
     }
     if (inFile.is_open()) {
       while (!inFile.eof()){
-        inFile >> STRING;
-        instrucoes[programa] = STRING;
+        inFile >> entrada;
+        instrucoes[programa] = entrada;
         programa++;
       }
     }
     inFile.close();
     for(int CP = 0; CP < programa; CP++){
-        cout << endl;
         instrucao = instrucoes[CP];
         t1t0 = instrucao.substr(0,2);
         codigo = instrucao.substr(2,5);
@@ -102,6 +99,10 @@ int main() {
 
         if(t1t0 == "00"){
           //ULA
+          if(psw % 2 == 1){
+            psw--;
+            registradores.LDR(1, psw);
+          }
           if(codigo == "00000"){
             //ADD
             ula.ADD(auxdestino,auxop1,auxop2);
@@ -109,6 +110,10 @@ int main() {
           if(codigo == "00001"){
             //ADDC
             ula.ADDC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "00010"){
             //SUB
@@ -117,6 +122,10 @@ int main() {
           if(codigo == "00011"){
             //SUBC
             ula.SUBC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "00100"){
             //SUBR
@@ -125,6 +134,10 @@ int main() {
           if(codigo == "00101"){
             //SUBRC
             ula.SUBRC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "00110"){
             //AND
@@ -145,6 +158,11 @@ int main() {
           if(codigo == "01010"){
             //RRLC
             ula.RRLC(auxdestino,auxop1,auxop2);
+            psw = registradores.get_reg(1);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "01011"){
             //RRA
@@ -153,6 +171,10 @@ int main() {
           if(codigo == "01100"){
             //RRAC
             ula.RRAC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "01101"){
             //RLL
@@ -161,6 +183,10 @@ int main() {
           if(codigo == "01110"){
             //RLLC
             ula.RLLC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "01111"){
             //RLA
@@ -169,6 +195,10 @@ int main() {
           if(codigo == "10000"){
             //RLAC
             ula.RLAC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "10001"){
             //SRL
@@ -177,6 +207,10 @@ int main() {
           if(codigo == "10010"){
             //SRLC
             ula.SRLC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "10011"){
             //SRA
@@ -185,6 +219,10 @@ int main() {
           if(codigo == "10100"){
             //SRAC
             ula.SLAC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "10101"){
             //SLL
@@ -193,6 +231,10 @@ int main() {
           if(codigo == "10110"){
             //SRLC
             ula.SLAC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
           if(codigo == "10111"){
             //SRA
@@ -201,6 +243,10 @@ int main() {
           if(codigo == "11000"){
             //SRAC
             ula.SLAC(auxdestino,auxop1,auxop2);
+            if(psw % 2 == 0){
+              psw++;
+              registradores.LDR(1, psw);
+            }
           }
         }
         if(t1t0 == "01"){

@@ -8,3 +8,8 @@
 00000000000011100000100000001011
 00000000000100000000100000000011
 00000000000011000111001000000000
+
+//deslocamento logico, divide/multiplica por 2*constante
+//deslocamento aritmetico desloca por 2*constante e copia a parte mais/menos significativa na posição original
+
+/rotação logica rotaciona os bits

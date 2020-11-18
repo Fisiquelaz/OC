@@ -1,6 +1,8 @@
 #include "../include/memoria.h"
 
-int MEM::mem[256] = {0};
+#define TAMANHO 1048576
+
+int MEM::mem[TAMANHO] = {0};
 
 MEM::MEM()
 {

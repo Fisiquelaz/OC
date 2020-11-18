@@ -4,10 +4,12 @@
 #include <iostream>
 using namespace std;
 
+#define TAMANHO 1048576
+
 class MEM
 {
     private:
-    	static int mem[256];
+    	static int mem[TAMANHO];
     public:
 	    MEM();
 	    int get_mem(int posicao);

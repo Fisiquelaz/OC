@@ -100,7 +100,7 @@ int main() {
           auxop2 = BTD(auxop2);
         }
 
-        if(t1t0 == "00" || t1t0 == "00"){
+        if(t1t0 == "00"){
           //ULA
           if(codigo == "00000"){
             //ADD
@@ -203,10 +203,47 @@ int main() {
             ula.SLAC(auxdestino,auxop1,auxop2);
           }
         }
-        /*fim = 1;
-        if(fim == 1){
-            break;
-        }*/
+        if(t1t0 == "01"){
+          //Memoria
+          if(codigo == "00000"){
+            //LD
+            registradores.LDR(auxdestino, memoria.get_mem(auxop1+auxop2));
+          }
+          if(codigo == "00001"){
+            //LDPRI
+            auxop2 += 1;
+            registradores.LDR(auxdestino, memoria.get_mem(auxop1+auxop2));
+          }
+          if(codigo == "00010"){
+            //LDPOI
+            registradores.LDR(auxdestino, memoria.get_mem(auxop1+auxop2));
+            auxop2 += 1;
+          }
+          if(codigo == "00011"){
+            //LDPOD
+            registradores.LDR(auxdestino, memoria.get_mem(auxop1+auxop2));
+            auxop2 -= 1;
+          }
+          if(codigo == "00100"){
+            //ST
+            memoria.ST(registradores.get_reg(auxdestino), auxop1, auxop2);
+          }
+          if(codigo == "00101"){
+            //STPRI
+            auxop2 += 1;
+            memoria.ST(registradores.get_reg(auxdestino), auxop1, auxop2);
+          }
+          if(codigo == "00110"){
+            //STPOI
+            memoria.ST(registradores.get_reg(auxdestino), auxop1, auxop2);
+            auxop2 += 1;
+          }
+          if(codigo == "00111"){
+            //STPOD
+            memoria.ST(registradores.get_reg(auxdestino), auxop1, auxop2);
+            auxop2 -= 1;
+          }
+        }
     }
     ofstream outFile ("saida.txt");
     if(outFile.is_open()){

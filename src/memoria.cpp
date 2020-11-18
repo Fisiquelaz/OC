@@ -11,6 +11,6 @@ int MEM::get_mem(int posicao){
 	return (mem[posicao]);
 }
 
-void MEM::STR(int valor, int posicao){
-  mem[posicao] = valor;
+void MEM::ST(int dest, int fa, int fb){
+  mem[fa+fb] = dest;
 }

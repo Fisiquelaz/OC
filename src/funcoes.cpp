@@ -14,34 +14,34 @@ int BTD(int n) {
 }
 
 string calculaKpe(string kp){
-  string kpe;
+  string kpe="";
   for(int i = 0; i < 22; i++){
-    kpe[i] = kp[0];
+    kpe += kp[0];
   }
   for(int i = 0; i < 10; i++){
-    kpe[22+i] = kp[1+i];
+    kpe += kp[1+i];
   }
   return kpe;
 }
 
 string calculaKgh(string kg){
-  string kgh;
+  string kgh="";
   for(int i = 0; i < 16; i++){
-    kgh[i] = kg[0];
+    kgh += kg[0];
   }
   for(int i = 0; i < 16; i++){
-    kgh[16+i] = kg[1+i];
+    kgh += kg[1+i];
   }
   return kgh;
 }
 
 string calculaKgl(string kg){
-  string kgl;
+  string kgl="";
   for(int i = 0; i < 16; i++){
-    kgl[16+i] = kg[0];
+    kgl += kg[0];
   }
   for(int i = 0; i < 16; i++){
-    kgl[i] = kg[1+i];
+    kgl += kg[1+i];
   }
   return kgl;
 }

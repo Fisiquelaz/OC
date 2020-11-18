@@ -44,17 +44,7 @@ int main() {
       }
     }
     inFile.close();
-    for(int CP = 0; CP < 128; CP++){
-        cout << "PC: " << CP << endl;
-        cout << "Registradores: " << endl;
-        for(int i = 0; i < 32; i++){
-            cout << i << ": " << registradores.get_reg(i) << " ";
-        }
-        cout << endl;
-        cout << "Memória de dados: " << endl;
-        for(int i = 128; i < 256; i++){
-            cout << i << ": " << memoria.get_mem(i) << " ";
-        }
+    for(int CP = 0; CP < programa; CP++){
         cout << endl;
         instrucao = instrucoes[CP];
         t1t0 = instrucao.substr(0,2);
@@ -64,31 +54,27 @@ int main() {
         kg = instrucao.substr(15,17);
 
         destino = instrucao.substr(10,5);
-        transformador << destino;
-        transformador >> auxdestino;
+        auxdestino = stoi(destino);
         auxdestino = BTD(auxdestino);
 
         f1f0 = instrucao.substr(8,2);
         if(f1f0 == "00"){
           //Recebe FT1 em string binario, transforma para int binario, transforma em decimal e recebe valor do registrador
           op1 = instrucao.substr(15,5);
-          transformador << op1;
-          transformador >> auxop1;
+          auxop1 = stoi(op1);
           auxop1 = BTD(auxop1);
           auxop1 = registradores.get_reg(auxop1);
 
           ss2 = instrucao[20];
           if(ss2 == '0'){
             op2 = instrucao.substr(21,5);
-            transformador << op2;
-            transformador >> auxop2;
+            auxop2 = stoi(op2);
             auxop2 = BTD(auxop2);
             auxop2 = registradores.get_reg(auxop2);
           }
           else{
             op2 = calculaKpe(kp);
-            transformador << op2;
-            transformador >> auxop2;
+            auxop2 = stoi(op2);
             auxop2 = BTD(auxop2);
           }
         }
@@ -96,24 +82,21 @@ int main() {
           op1 = "00000";
           auxop1 = registradores.get_reg(0);
           op2 = calculaKgl(kg);
-          transformador << op2;
-          transformador >> auxop2;
+          auxop2 = stoi(op2);
           auxop2 = BTD(auxop2);
         }
         if(f1f0 == "10"){
           op1 = destino;
           auxop1 = registradores.get_reg(auxdestino);
           op2 = calculaKgh(kg);
-          transformador << op2;
-          transformador >> auxop2;
+          auxop2 = stoi(op2);
           auxop2 = BTD(auxop2);
         }
         if(f1f0 == "11"){
           op1 = destino;
           auxop1 = registradores.get_reg(auxdestino);
           op2 = calculaKgl(kg);
-          transformador << op2;
-          transformador >> auxop2;
+          auxop2 = stoi(op2);
           auxop2 = BTD(auxop2);
         }
 
@@ -220,17 +203,18 @@ int main() {
             ula.SLAC(auxdestino,auxop1,auxop2);
           }
         }
-        fim = 1;
+        /*fim = 1;
         if(fim == 1){
             break;
-        }
+        }*/
     }
     ofstream outFile ("saida.txt");
     if(outFile.is_open()){
-        cout << "Registradores: " << endl;
+        outFile << "Registradores: " << endl;
         for(int i = 0; i < 32; i++){
-            cout << i << ": " << registradores.get_reg(i) << " ";
+            outFile << i << ": " << registradores.get_reg(i) << " ";
         }
+        outFile << endl;
         outFile << "Ciclos: " << ciclos;
     }
     outFile.close();

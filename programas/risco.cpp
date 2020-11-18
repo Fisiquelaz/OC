@@ -16,7 +16,7 @@ int main() {
     ULA ula;
 
     int programa = 0, ciclos = 0, psw;
-    int auxdestino, auxop1, auxop2;
+    int auxdestino, auxop1, auxop2, sp;
 
     string entrada, arquivo, instrucao;
     string t1t0, codigo, f1f0, kp, kg;
@@ -96,7 +96,7 @@ int main() {
           auxop2 = stoi(op2);
           auxop2 = BTD(auxop2);
         }
-
+        psw = registradores.get_reg(1);
         if(t1t0 == "00"){
           //ULA
           if(psw % 2 == 1){
@@ -158,7 +158,6 @@ int main() {
           if(codigo == "01010"){
             //RRLC
             ula.RRLC(auxdestino,auxop1,auxop2);
-            psw = registradores.get_reg(1);
             if(psw % 2 == 0){
               psw++;
               registradores.LDR(1, psw);
@@ -251,6 +250,7 @@ int main() {
         }
         if(t1t0 == "01"){
           //Memoria
+          ciclos++;
           if(codigo == "00000"){
             //LD
             registradores.LDR(auxdestino, memoria.get_mem(auxop1+auxop2));
@@ -290,7 +290,27 @@ int main() {
             auxop2 -= 1;
           }
         }
+        if(t1t0 == "10"){
+          //Salto
+          if(codigo == DTB(psw)){
+            CP = auxop1 + auxop2;
+            CP--;
+          }
+        }
+        if(t1t0 == "11"){
+          //Sub-rotina
+          ciclos++;
+          if(codigo == DTB(psw)){
+            sp = registradores.get_reg(2);
+            registradores.LDR(2, --sp);
+            memoria.ST(sp, CP, 0);
+            CP = auxop1 + auxop2;
+            CP--;
+          }
+        }
+        registradores.LDR(31, CP);
     }
+    ciclos = programa*(2) + ciclos;
     ofstream outFile ("saida.txt");
     if(outFile.is_open()){
         outFile << "Registradores: " << endl;

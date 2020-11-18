@@ -2,16 +2,19 @@
 
 //Transforma um decimal numa sintrg binaria
 string DTB(int n) {
-   string binaryNumber[100], result = "";
-   int num=n, i = 0;
-   while (n > 0) {
-      binaryNumber[i] = to_string(n % 2);
-      n = n / 2;
-      i++;
-   }
-   for (int j = i - 1; j >= 0; j--)
-      result += binaryNumber[j];
-   return result;
+  string binaryNumber[100], result = "";
+  int num=n, i = 0;
+  while (n > 0) {
+    binaryNumber[i] = to_string(n % 2);
+    n = n / 2;
+    i++;
+  }
+  for (int j = i - 1; j >= 0; j--)
+    result += binaryNumber[j];
+  while(result.size() < 32){
+    result = "0" + result;
+  }
+  return result;
 }
 
 //Transforma um inteiro binário num decimal

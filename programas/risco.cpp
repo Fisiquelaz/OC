@@ -16,7 +16,7 @@ int main() {
     REGS registradores;
     ULA ula;
 
-    //Variaveis para auxilicar o tratamento dos valores e de controle do processador
+    //Variaveis para auxiliar o tratamento dos valores e de controle do processador
     int programa = 0, ciclos = 0, psw;
     int auxdestino, auxop1, auxop2, sp;
 
@@ -223,11 +223,11 @@ int main() {
           }
           if(codigo == "10011"){
             //SRA
-            ula.SLA(auxdestino,auxop1,auxop2);
+            ula.SRA(auxdestino,auxop1,auxop2);
           }
           if(codigo == "10100"){
             //SRAC
-            ula.SLAC(auxdestino,auxop1,auxop2);
+            ula.SRAC(auxdestino,auxop1,auxop2);
             if(psw % 2 == 0){
               psw++;
               registradores.LDR(1, psw);
@@ -235,22 +235,22 @@ int main() {
           }
           if(codigo == "10101"){
             //SLL
-            ula.SLA(auxdestino,auxop1,auxop2);
+            ula.SLL(auxdestino,auxop1,auxop2);
           }
           if(codigo == "10110"){
-            //SRLC
-            ula.SLAC(auxdestino,auxop1,auxop2);
+            //SLLC
+            ula.SLLC(auxdestino,auxop1,auxop2);
             if(psw % 2 == 0){
               psw++;
               registradores.LDR(1, psw);
             }
           }
           if(codigo == "10111"){
-            //SRA
+            //SLA
             ula.SLA(auxdestino,auxop1,auxop2);
           }
           if(codigo == "11000"){
-            //SRAC
+            //SLAC
             ula.SLAC(auxdestino,auxop1,auxop2);
             if(psw % 2 == 0){
               psw++;

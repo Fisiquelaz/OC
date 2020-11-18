@@ -11,25 +11,28 @@ void ULA::ADD(int dest, int fa, int fb){
 }
 
 void ULA::ADDC(int dest, int fa, int fb){
-
+  REGS r;
+	r.LDR(dest, fa + fb);
 }
 
 void ULA::SUB(int dest, int fa, int fb){
 	REGS r;
-	r.LDR(dest, fa - fb + 1);
+	r.LDR(dest, fa - fb);
 }
 
 void ULA::SUBC(int dest, int fa, int fb){
-
+  REGS r;
+	r.LDR(dest, fa - fb);
 }
 
 void ULA::SUBR(int dest, int fa, int fb){
 	REGS r;
-	r.LDR(dest, fb - fa + 1);
+	r.LDR(dest, fb - fa);
 }
 
 void ULA::SUBRC(int dest, int fa, int fb){
-	
+	REGS r;
+	r.LDR(dest, fb - fa);
 }
 
 void ULA::AND(int dest, int fa, int fb){
@@ -88,7 +91,7 @@ void ULA::RLL(int dest, int fa, int fb){
   REGS r;
   string aux = DTB(fa);
   string aux2 = aux.substr(0,fb);
-  for(int i = 31; i >= fb; i++){
+  for(int i = 31; i >= fb; i--){
     aux2 = aux[i] + aux2;
   }
   r.LDR(dest, BTD(stoi(aux2)));
@@ -97,7 +100,7 @@ void ULA::RLLC(int dest, int fa, int fb){
   REGS r;
   string aux = DTB(fa);
   string aux2 = aux.substr(0,fb);
-  for(int i = 31; i >= fb; i++){
+  for(int i = 31; i >= fb; i--){
     aux2 = aux[i] + aux2;
   }
   r.LDR(dest, BTD(stoi(aux2)));
@@ -164,7 +167,7 @@ void ULA::SLA(int dest, int fa, int fb){
   REGS r;
   string aux = DTB(fa);
   string aux2 = aux.substr(32-fb,fb);
-  for(int i = 31; i >= fb; i++){
+  for(int i = 31; i >= fb; i--){
     aux2 = aux[i] + aux2;
   }
   r.LDR(dest, BTD(stoi(aux2)));
@@ -173,7 +176,7 @@ void ULA::SLAC(int dest, int fa, int fb){
   REGS r;
   string aux = DTB(fa);
   string aux2 = aux.substr(32-fb,fb);
-  for(int i = 31; i >= fb; i++){
+  for(int i = 31; i >= fb; i--){
     aux2 = aux[i] + aux2;
   }
   r.LDR(dest, BTD(stoi(aux2)));

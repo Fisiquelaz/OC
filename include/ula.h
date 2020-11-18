@@ -7,6 +7,8 @@
 #include <cmath>
 using namespace std;
 
+//Não haverá comentários nas funções da ULA, uma vez que todas são auto-explicativas e são detalhadas na referência [1] do relatório
+
 class ULA {
 
   private:

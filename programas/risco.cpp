@@ -11,21 +11,24 @@
 using namespace std;
 
 int main() {
+    //Objetos de componentes que serão usados
     MEM memoria;
     REGS registradores;
     ULA ula;
 
+    //Variaveis para auxilicar o tratamento dos valores e de controle do processador
     int programa = 0, ciclos = 0, psw;
     int auxdestino, auxop1, auxop2, sp;
 
+    //Variáveis para ler as instruções e identificar operandos
     string entrada, arquivo, instrucao;
     string t1t0, codigo, f1f0, kp, kg;
-    string destino, op1, op2;
+    string destino, op1, op2; //Nota: op1=FT1 e op2=FT2
     string instrucoes[100];
     char ss2;
 
     ifstream inFile;
-
+    //O programa tem como entrada um arquivo a ser lido, nesse arquivo devem estar contidas todas as instruções a serem executadas. Note que somente um arquivo é lido a cada execução do programa e a cada execução, os valores de memória e registradores  estão vazios
     cout << "Insira o nome do arquivo com as intruções (deve estar na mesma pasta do programa)" << endl;
     cin >> arquivo;
 
@@ -35,6 +38,7 @@ int main() {
         return -1;
     }
     if (inFile.is_open()) {
+      //Lendo as intruções no arquivo e salvando num vetor
       while (!inFile.eof()){
         inFile >> entrada;
         instrucoes[programa] = entrada;
@@ -43,6 +47,7 @@ int main() {
     }
     inFile.close();
     for(int CP = 0; CP < programa; CP++){
+        //Identificando operandos a partir da palavra de instrução
         instrucao = instrucoes[CP];
         t1t0 = instrucao.substr(0,2);
         codigo = instrucao.substr(2,5);
@@ -50,13 +55,14 @@ int main() {
         kp = instrucao.substr(21,11);
         kg = instrucao.substr(15,17);
 
+        //Transformando destino (string binaria) em decimal
         destino = instrucao.substr(10,5);
         auxdestino = stoi(destino);
         auxdestino = BTD(auxdestino);
 
         f1f0 = instrucao.substr(8,2);
         if(f1f0 == "00"){
-          //Recebe FT1 em string binario, transforma para int binario, transforma em decimal e recebe valor do registrador
+          //Recebe FT1 em string binario, transforma para int binario, transforma em decimal e recebe valor do registrador da posição FT1
           op1 = instrucao.substr(15,5);
           auxop1 = stoi(op1);
           auxop1 = BTD(auxop1);
@@ -64,12 +70,14 @@ int main() {
 
           ss2 = instrucao[20];
           if(ss2 == '0'){
+            //Mesma operação de FT1
             op2 = instrucao.substr(21,5);
             auxop2 = stoi(op2);
             auxop2 = BTD(auxop2);
             auxop2 = registradores.get_reg(auxop2);
           }
           else{
+            //Calcula o valor de kpe e transforma em decimal
             op2 = calculaKpe(kp);
             auxop2 = stoi(op2);
             auxop2 = BTD(auxop2);
@@ -78,6 +86,7 @@ int main() {
         if(f1f0 == "01"){
           op1 = "00000";
           auxop1 = registradores.get_reg(0);
+          //Calcula o valor de kgl e transforma em decimal
           op2 = calculaKgl(kg);
           auxop2 = stoi(op2);
           auxop2 = BTD(auxop2);
@@ -85,6 +94,7 @@ int main() {
         if(f1f0 == "10"){
           op1 = destino;
           auxop1 = registradores.get_reg(auxdestino);
+          //Calcula o valor de kgh e transforma em decimal
           op2 = calculaKgh(kg);
           auxop2 = stoi(op2);
           auxop2 = BTD(auxop2);
@@ -310,7 +320,12 @@ int main() {
         }
         registradores.LDR(31, CP);
     }
-    ciclos = programa*(2) + ciclos;
+    //Calculando número de ciclos com pipeline
+    //ciclos = t * [k + (n-1)]
+    //Como algumas intstruções tem ciclos adicionais, são somados esses ciclos no calculo também
+    ciclos = programa*(3) + ciclos;
+
+    //Escrevendo no 
     ofstream outFile ("saida.txt");
     if(outFile.is_open()){
         outFile << "Registradores: " << endl;

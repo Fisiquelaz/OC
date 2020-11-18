@@ -1,5 +1,6 @@
 #include "../include/funcoes.h"
 
+//Transforma um decimal numa sintrg binaria
 string DTB(int n) {
    string binaryNumber[100], result = "";
    int num=n, i = 0;
@@ -13,6 +14,7 @@ string DTB(int n) {
    return result;
 }
 
+//Transforma um inteiro binário num decimal
 int BTD(int n) {
   int decimal = 0;
   int base = 1;
@@ -26,6 +28,7 @@ int BTD(int n) {
   return decimal;
 }
 
+//Calcula Kpe, como informado na referência [1] do relatório
 string calculaKpe(string kp){
   string kpe="";
   for(int i = 0; i < 22; i++){
@@ -37,6 +40,7 @@ string calculaKpe(string kp){
   return kpe;
 }
 
+//Calcula Kgh, como informado na referência [1] do relatório
 string calculaKgh(string kg){
   string kgh="";
   for(int i = 0; i < 16; i++){
@@ -48,6 +52,7 @@ string calculaKgh(string kg){
   return kgh;
 }
 
+//Calcula Kgl, como informado na referência [1] do relatório
 string calculaKgl(string kg){
   string kgl="";
   for(int i = 0; i < 16; i++){
